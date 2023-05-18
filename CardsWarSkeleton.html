@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Array Ex - Cards</title>
+    <script src="utils.js"></script>
+
+    <style type="text/css">
+
+        img {
+            height:100px;
+            border:2px solid red;
+            margin-left:10px;
+        }
+
+        #container {
+            width:220px;
+        }
+
+        #container > div {
+            float:left;
+            width:50%;
+            text-align:center;
+        }
+
+    </style>
+    <script>
+
+        function shuffle(a) {
+            var j;
+            for (var i = a.length - 1; i > 0; i--) {
+                j = Math.floor(Math.random() * i);
+                x = a[i];
+                a[i] = a[j];
+                a[j] = x;
+            }
+            return a;
+        }
+
+        function fight(p1, p2) {
+            var score = [0, 0];
+
+
+            for (x in p1) {
+                if (p1[x].points > p2[x].points) score[0]++;
+                if (p2[x].points > p1[x].points) score[1]++;
+            }
+            return score;
+        }
+
+        function showScore(finalScore)
+        {
+            writeToDiv("ph1", "<div>player1: " + finalScore[0] + "</div>", true);
+            writeToDiv("ph2", "<div>player2: " + finalScore[1] + "</div>", true);
+        }
+
+        function renderCards(player,id)
+        {
+            for (t in player)
+            {
+                    writeToDiv(id, '<img src=' + player[t].img + '>', false);
+            }
+        }
+
+        function start() {
+
+
+
+                var typeOfCards = ["clubs", "diamonds", "hearts", "spades"];
+                var values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "jack", "queen", "king", "ace"];
+                var cards = [];
+                for (var i in typeOfCards) {
+                    for (var j in values) {
+                        var obj = new Object();
+                        obj.name = values[j] + "_of_" + typeOfCards[i];
+                        obj.img = "cardImages/" + obj.name + ".png";
+                        obj.points = parseInt(j)+2;
+                        cards.push(obj);
+                    }
+            }
+            var obj = new Object();
+            obj.name = "red_joker";
+            obj.img = "cardImages/" + obj.name + ".png";
+            obj.points = 15;
+            cards.push(obj);
+
+            obj = new Object();
+            obj.name = "black_joker";
+            obj.img = "cardImages/" + obj.name + ".png";
+            obj.points = 15;
+            cards.push(obj);
+
+            cards = shuffle(cards);
+            var player1 = cards.slice(0,27);
+
+
+            var player2 = cards.slice(27);
+
+            var finalscore = fight(player1, player2);
+            showScore(finalscore);
+            renderCards(player1, "ph1");
+            renderCards(player2, "ph2");
+        }
+    </script>
+</head>
+<body>
+    
+    <input type="button" value="Start" onclick="start()" />
+    <div id="container">
+        <div id="ph1"></div>
+        <div id="ph2"></div>
+    </div>
+
+
+</body>
+</html>
